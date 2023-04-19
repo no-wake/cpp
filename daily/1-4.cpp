@@ -2,7 +2,7 @@
 using namespace std;
 
 template <class T>
-void inner_product(T *arr,const T value)
+void iota(T *arr,const T value)
 {
     int i;
     for(i=0;i<sizeof(arr);i++)
@@ -14,7 +14,7 @@ void inner_product(T *arr,const T value)
 
 int main(){
     int arr[]={0,43,23,56,3,6,7};
-    inner_product(arr,7);
+    iota(arr,7);
 
     for(int i=0;i<7;i++)
         cout<<arr[i]<<endl;

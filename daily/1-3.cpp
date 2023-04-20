@@ -14,7 +14,7 @@ void fill(T *arr,int start,int end,T value)
 
 int main(){
 
-    char arr[]={};
+    char arr[7]={};
     fill(arr,0,7,'w');
     for(int i=0;i<7;i++)
     {

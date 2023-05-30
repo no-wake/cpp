@@ -17,7 +17,7 @@ int abc(int a,int b,int c)
 }
 
 int main(){
-    try{cout<<abc(1,4,1)<<endl;}
+    try{cout<<abc(1,7,1)<<endl;}
     catch(int c)
     {
         cout<<"wrong!"<<endl;

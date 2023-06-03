@@ -25,13 +25,100 @@ class currency{
         currency mulitiply(double x);
         currency div(double x);
  
- 
+        currency operator+(const currency&) const;
+        currency& operator+=(const currency&);
+        currency operator/(double);
+        currency operator%(double);
+        currency operator*(double);
+        currency operator=(double);
+        friend ostream& operator<<(ostream&,const currency&);
+
  
         private :  //只能通过成员函数访问  不能对象私自 访问
             signType sign;
             unsigned long dollars;
             unsigned int cents;
 }; 
+
+currency currency::operator=(double x)
+{   
+    if(x<0)x=-x,sign=signType::minus;
+    else sign=signType::plus;
+
+    dollars=(unsigned long) x;
+    cents=(unsigned int)((x+0.001-dollars)*100);
+    
+    return *this;
+}
+
+ostream& operator<<(ostream& out,const currency& x){
+    if(x.sign==signType::minus)std::cout<<"-";
+    std::cout<<"$"<<x.dollars<<".";
+    if(x.cents<10)std::cout<<0;
+    std::cout<<x.cents<<endl;
+    return out;
+}
+
+currency currency::operator+(const currency& x) const
+{
+    long a1,a2,a3;
+    currency result;
+
+    //转为符号整数
+    a1=dollars*100+cents;
+    if(sign==signType::minus) a1=-a1;
+
+    a2=x.dollars*100+x.cents;
+    if(sign==signType::minus) a2=-a2;
+
+    a3=a1+a2;
+
+    if(a3<0){result.sign=signType::minus;}
+    else result.sign=signType::plus;
+    result.dollars=a3/100;
+    result.cents=a3-result.dollars*100;
+
+    return result;
+}
+
+currency& currency::operator+=(const currency& x)
+{
+    *this= *this+x;
+    return *this;
+}
+
+currency currency::operator/(double x){
+    if(x==0)throw "x shouldn't be 0.";
+    
+    currency result;
+    long temp;
+
+    temp=dollars*100+cents;
+    temp=temp/x;
+    result.dollars=temp/100;
+    result.cents=temp-result.dollars*100;
+    if((x<0&&sign==signType::plus)) result.sign=signType::minus;
+    else if((x<0&&sign==signType::minus)) result.sign=signType::plus;
+    else result.sign=sign;
+
+    return result;
+}
+
+currency currency::operator%(double x) 
+{
+    currency result;
+
+    long temp;
+    temp=dollars*100+cents;
+    temp=temp*x/100;
+    result.dollars=temp/100;
+    result.cents=temp-result.dollars*100;
+    result.sign=sign;
+
+    return result;
+}
+
+
 
 void currency::setValue(signType theSign,unsigned long theDollars,unsigned int theCents)
 {
@@ -44,10 +131,10 @@ void currency::setValue(signType theSign,unsigned long theDollars,unsigned int t
 
 
 void currency::output() const{
-    if(sign==signType::minus)cout<<"-";
-    cout<<"$"<<dollars<<".";
-    if(cents<10)cout<<0;
-    cout<<cents<<endl;
+    if(sign==signType::minus)std::cout<<"-";
+    std::cout<<"$"<<dollars<<".";
+    if(cents<10)std::cout<<0;
+    std::cout<<cents<<endl;
 }
 
 void currency::input(){

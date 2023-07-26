@@ -15,10 +15,24 @@ struct ListNode
     ListNode(){}
     ListNode(T e,ListNodePos(T) p=NULL,ListNodePos(T) s=NULL):data(e),pre(p),suc(s){}
 
-    ListNodePos(T) insertBefore(T &const e);
-    ListNodePos(T) insertAfter(T &const e);
+    ListNodePos(T) insertPre(T const& e);
+    ListNodePos(T) insertSuc(T const& e);
 };
 
+template<class T>
+ListNodePos(T) ListNode<T>::insertPre(T const& e){
+    ListNodePos(T) pred=new ListNode (e,pre,this);
+    pre->suc=pred;
+    pre=pred;
+    return pred;
+}
 
+template<class T>
+ListNodePos(T) ListNode<T>::insertSuc(T const& e){
+    ListNodePos(T) succ=new ListNode(e,this,suc);
+    suc->pre=succ;
+    suc=succ;
+    return succ;
+}
 
 #endif

@@ -12,7 +12,7 @@ class List {
     protected:
     void init();
     int clear();
-    void copyNodes(ListNodePos(T),int);
+    void copyNodes(ListNodePos(T) p,int n);
     void merge(ListNodePos(T)&,int,List<T>&,ListNodePos(T),int);
     void mergeSort(ListNodePos(T)&,int);
     void selectSort(ListNodePos(T),int);
@@ -24,7 +24,7 @@ class List {
     List(List<T> const& L,Rank r,Rank n);
     List(ListNodePos(T) p,int n);
 
-    ~List();
+    ~List(){};
     Rank size()const {return _size;}
     bool empty(){return _size<=0;}
     T& operator[](Rank r) const;
@@ -55,8 +55,133 @@ class List {
     ListNodePos(T) insertLast(T const& e);
     ListNodePos(T) insertB(ListNodePos(T) p,T const& e);
     ListNodePos(T) insertA(ListNodePos(T) p,T const& e);
-    T remove(ListNodePos(T) p);
-    void merge(List<T>& L){merge(first(),size,L,L.first())}
 
+
+    T remove(ListNodePos(T) p);
+    void merge(List<T>& L){merge(first(),size,L,L.first());}
+    void sort(ListNodePos(T) p,int n);
+    void sort(){sort(first(),_size);}
+    int deduplicate();
+    int uniquify();
+    int reserve();
+
+    void traverse(void(*) (T&));
+    template<class VST>
+    void traverse(VST&);
 
 };
+
+
+template<class T>
+void List<T>::init(){
+    header= new ListNodePos(T);
+    trailer= new ListNodePos(T);
+
+    header->suc=trailer;
+    header->pre=NULL;
+    trailer->pre=header;
+    trailer->suc=NULL;
+
+    _size=0;
+}
+
+template<class T>
+int List<T>::clear()
+{   
+    int oldsize=_size;
+    while(_size--) remove(header->suc);
+    return oldsize;
+}
+
+template<class T>
+T List<T>::remove(ListNodePos(T) p){
+    T e=p->data;
+    p->pre->suc=p->suc;
+    p->suc->pre=p->pre;
+    _size--;
+    delete p;
+    return e;
+}
+
+template<class T>
+void List<T>::copyNodes(ListNodePos(T) p,int n){
+    while(n>0)
+    {
+        init();
+        while(n--)
+        {
+            insertLast(p->data);
+            p=p->suc;
+        }
+    }
+}
+
+template<class T>
+ListNodePos(T) List<T>::insertLast(T const& e){
+    _size++;
+    return trailer->insertPre(e);
+}
+
+template<class T>
+ListNodePos(T) List<T>::insertFirst(T const& e){
+    _size++;
+    return header->insertSuc(e);
+}
+
+template<class T>
+ListNodePos(T) List<T>::insertA(ListNodePos(T) p,T const& e){
+    _size++;
+    return p->insertSuc(e);
+}
+
+template<class T>
+ListNodePos(T) List<T>::insertB(ListNodePos(T) p,T const& e){
+   _size++;
+   return p->insertPre(e);
+}
+
+
+//向后查找
+template<class T>
+ListNodePos(T) List<T>::find(T const& e,int n,ListNodePos(T) p) const{
+
+    while(n--)
+    {
+        if(p->data==e)
+            return p;
+        else 
+            p=p->suc;
+    }
+    return NULL;
+}
+
+template<class T>
+ListNodePos(T) List<T>::search(T const& e,int n,ListNodePos(T) p){
+    //有序区间查找出最大的不大于e的元素
+    while(n--)
+    {
+        if(p->data<=e)
+            p=p->suc;
+        else return p;
+    }
+}
+
+template<class T>
+int List<T>::deduplicate(){
+    ListNodePos(T) pn=trailer;
+    int oldsize=_size;
+    Rank r=0;
+    while(header!=pn){
+        ListNodePos(T) q=find(pn->data,r,pn);
+        q?remove(q):r++;
+        }
+        return oldsize-_size;
+    }
+
+
+
+
+int main(){
+    return 0;
+}
+

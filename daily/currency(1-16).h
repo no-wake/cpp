@@ -34,7 +34,7 @@ class currency{
         friend ostream& operator<<(ostream&,const currency&);
 
  
-        private :  //只能通过成员函数访问  不能对象私自 访问
+        private :  //只能通过成员函数访问，不能对象私自访问
             signType sign;
             unsigned long dollars;
             unsigned int cents;

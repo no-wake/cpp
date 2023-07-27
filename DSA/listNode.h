@@ -21,7 +21,7 @@ struct ListNode
 
 template<class T>
 ListNodePos(T) ListNode<T>::insertPre(T const& e){
-    ListNodePos(T) pred=new ListNode (e,pre,this);
+    ListNodePos(T) pred=new ListNode(e,pre,this);
     pre->suc=pred;
     pre=pred;
     return pred;

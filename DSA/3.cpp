@@ -14,7 +14,7 @@ class List {
     void init();
     int clear();
     void copyNodes(ListNodePos(T) p,int n);
-    void merge(ListNodePos(T)& p,int n1,List<T>& L,ListNodePos(T) q,int n);
+    void merge(ListNodePos(T)& p,int n1,List<T>& L,ListNodePos(T) q,int n2);
     void mergeSort(ListNodePos(T)& p,int n);
     void selectSort(ListNodePos(T) p,int n);
     void insertSort(ListNodePos(T) p,int n);
@@ -336,6 +336,34 @@ void List<T>::selectSort(ListNodePos(T) p,int n){
         n--;
     }
 }
+
+template<class T>
+void List<T>::merge(ListNodePos(T)& p,int n1,List<T>& L,ListNodePos(T) q,int n2){
+    ListNodePos(T) pp=p->pre;
+    while(0<n2){
+        if((0<n1)&&(p->data<=q->data))
+            {if(q==(p=p->suc))break;n1--}
+        else
+            {
+                insertB(p,q->data);
+                q=q->suc;
+                remove(q->pre);
+                n2--;
+            }
+    }
+    p=pp->suc;
+}
+
+template<class T>
+void List<T>::mergeSort(ListNodePos(T)& p,int n){
+    if(n<2) return;
+    int m=n/2;
+    ListNodePos(T) q=p;
+    for(int i=0;i<m;i++) q=q->suc;
+    mergeSort(p,m);mergeSort(q,n-m);
+    merge(p,m,*this,q,n-m);
+}
+
 
 template<class T>
 void List<T>::sort(ListNodePos(T) p,int n){

@@ -159,7 +159,8 @@ static void displayLaby() { //┘└┐┌│─
 	//system("cls");
 	printf("  ");
 	for (int j = 0; j < labySize; j++)
-		(j < 10) ? printf("%2X", j) : printf(" %c", 'A' - 10 + j);
+		(j < 10) ? printf("%2X", j) : printf(" %c", 'A' - 10
+		+ j);
 	printf("\n");
 	for (int j = 0; j < labySize; j++)
 	{
